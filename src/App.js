@@ -10,7 +10,6 @@ function App() {
     for (let index = 0; index < numberCount; index++) {
       let element = {"number": (Math.floor(Math.random() * 500) + 1), "selected": false};
       setNumbers(numbers => [...numbers, element]);
-      //setNumbers(numbers => [...numbers, (Math.floor(Math.random() * 500) + 1)]);
     }
   }, []);
 
@@ -39,11 +38,21 @@ function App() {
           numbers_copy[index].selected = true;
           numbers_copy[index2].selected = true;
           setNumbers([...numbers_copy]);
-          await wait(25)
+          await wait(10)
           let temp_num = numbers[index].number;
           let temp_num2 = numbers[index2].number;
           numbers_copy[index].number = temp_num2;
           numbers_copy[index2].number = temp_num;
+          numbers_copy[index].selected = false;
+          numbers_copy[index2].selected = false;
+          setNumbers([...numbers_copy]);
+        }
+        else
+        {
+          numbers_copy[index].selected = true;
+          numbers_copy[index2].selected = true;
+          setNumbers([...numbers_copy]);
+          await wait(10)
           numbers_copy[index].selected = false;
           numbers_copy[index2].selected = false;
           setNumbers([...numbers_copy]);
@@ -58,11 +67,11 @@ function App() {
       <div className="bars">
         {numbers.map(x => <div className='value_bar' class={x.selected ? "value_bar selected" : "value_bar"} style={{height:x.number}} key={Math.random()}></div>)}
       </div>
-        <form>
-          <input onChange={handleChange}></input>
-          <button onClick={handleSet} disabled={isSorting ? "true" : ""}>SET</button>
-          <button onClick={sortFunction} disabled={isSorting ? "true" : ""}>SORT</button>
-        </form>
+      <form>
+        <input value={numberCount} onChange={handleChange}></input>
+        <button onClick={handleSet} disabled={isSorting ? "true" : ""}>SET</button>
+        <button onClick={sortFunction} disabled={isSorting ? "true" : ""}>SORT</button>
+      </form>
     </div>
   );
 }

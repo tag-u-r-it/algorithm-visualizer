@@ -29,8 +29,9 @@ function App() {
   };
 
   const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+  const speed = 10;
 
-  const sortFunction = async (event) => {
+  const selectionSortFunction = async (event) => {
     event.preventDefault();
     setIsSorting(true)
     let numbers_copy = [...numbers];
@@ -40,7 +41,7 @@ function App() {
           numbers_copy[index].selected = true;
           numbers_copy[index2].selected = true;
           setNumbers([...numbers_copy]);
-          await wait(10)
+          await wait(speed)
           let temp_num = numbers[index].number;
           let temp_num2 = numbers[index2].number;
           numbers_copy[index].number = temp_num2;
@@ -54,7 +55,7 @@ function App() {
           numbers_copy[index].selected = true;
           numbers_copy[index2].selected = true;
           setNumbers([...numbers_copy]);
-          await wait(10)
+          await wait(speed)
           numbers_copy[index].selected = false;
           numbers_copy[index2].selected = false;
           setNumbers([...numbers_copy]);
@@ -64,16 +65,50 @@ function App() {
     setIsSorting(false)
   };
 
+  const bubbleSortFunction = async (event) =>{
+    event.preventDefault();
+    setIsSorting(true);
+    let numbers_copy = [...numbers];
+    for (let i = 0; i < numbers.length; i++) {
+      for (let index = 0; index < numbers.length-1; index++) {
+        let index2 = index+1;
+        if (numbers_copy[index].number > numbers_copy[index2].number) {
+          numbers_copy[index2].selected = true;
+          setNumbers([...numbers_copy]);
+          await wait(speed)
+          let temp_num = numbers[index].number;
+          let temp_num2 = numbers[index2].number;
+          numbers_copy[index].number = temp_num2;
+          numbers_copy[index2].number = temp_num;
+          numbers_copy[index].selected = false;
+          numbers_copy[index2].selected = false;
+        }
+        else
+        {
+          numbers_copy[index].selected = true;
+          numbers_copy[index2].selected = true;
+          setNumbers([...numbers_copy]);
+          await wait(speed)
+          numbers_copy[index].selected = false;
+          numbers_copy[index2].selected = false;
+          setNumbers([...numbers_copy]);
+        }
+      }
+    }
+    setIsSorting(false);
+  };
+
   return (
     <div className='container'>
       <h2>ALGORITHM VISUALIZER</h2>
       <div className="bars">
-        {numbers.map(x => <div className='value_bar' class={x.selected ? "value_bar selected" : "value_bar"} style={{height:x.number, width:(500/numberCount)}} key={Math.random()}></div>)}
+        {numbers.map(x => <div className={x.selected ? "value_bar selected" : "value_bar"} style={{height:x.number, width:(500/numberCount)}} key={Math.random()}></div>)}
       </div>
       <form>
         <input type="range" min="5" value={numberCount} onChange={handleChange} disabled={isSorting ? "true" : ""}></input>
         <button onClick={handleSet} disabled={isSorting ? "true" : ""}>SET</button>
-        <button onClick={sortFunction} disabled={isSorting ? "true" : ""}>SORT</button>
+        <button onClick={selectionSortFunction} disabled={isSorting ? "true" : ""}>SELECTION SORT</button>
+        <button onClick={bubbleSortFunction} disabled={isSorting ? "true" : ""}>BUBBLE SORT (SLOW!)</button>
       </form>
     </div>
   );

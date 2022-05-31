@@ -20,6 +20,7 @@ input{
   text-align: center;
   display:flex;
   flex-direction: row;
+  height: 500px;
 }
 .value_bar{
   margin: 0px 2px;

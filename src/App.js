@@ -6,24 +6,26 @@ function App() {
   const [numberCount, setNumberCount] = useState(50);
   const [isSorting, setIsSorting] = useState(false);
 
-  useEffect(()=>{
-    for (let index = 0; index < numberCount; index++) {
-      let element = {"number": (Math.floor(Math.random() * 500) + 1), "selected": false};
-      setNumbers(numbers => [...numbers, element]);
-    }
-  }, []);
-
-  const handleChange = (event) =>{
-    setNumberCount(event.target.value);
-  };
-
-  const handleSet = (event) =>{
-    event.preventDefault();
+  const setNumbersFunction = () =>{
     setNumbers([]);
     for (let index = 0; index < numberCount; index++) {
       let element = {"number": (Math.floor(Math.random() * 500) + 1), "selected": false};
       setNumbers(numbers => [...numbers, element]);
     }
+  };
+
+  useEffect(()=>{
+    setNumbersFunction();
+  }, []);
+
+  const handleChange = (event) =>{
+    setNumberCount(event.target.value);
+    setNumbersFunction();
+  };
+
+  const handleSet = (event) =>{
+    event.preventDefault();
+    setNumbersFunction();
   };
 
   const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
@@ -64,11 +66,12 @@ function App() {
 
   return (
     <div className='container'>
+      <h2>ALGORITHM VISUALIZER</h2>
       <div className="bars">
-        {numbers.map(x => <div className='value_bar' class={x.selected ? "value_bar selected" : "value_bar"} style={{height:x.number}} key={Math.random()}></div>)}
+        {numbers.map(x => <div className='value_bar' class={x.selected ? "value_bar selected" : "value_bar"} style={{height:x.number, width:(500/numberCount)}} key={Math.random()}></div>)}
       </div>
       <form>
-        <input value={numberCount} onChange={handleChange}></input>
+        <input type="range" min="5" value={numberCount} onChange={handleChange} disabled={isSorting ? "true" : ""}></input>
         <button onClick={handleSet} disabled={isSorting ? "true" : ""}>SET</button>
         <button onClick={sortFunction} disabled={isSorting ? "true" : ""}>SORT</button>
       </form>

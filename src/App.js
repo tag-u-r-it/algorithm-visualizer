@@ -37,29 +37,19 @@ function App() {
     let numbers_copy = [...numbers];
     for (let index = 0; index < numbers.length; index++) {
       for (let index2 = 0; index2 < index; index2++) {
+        numbers_copy[index].selected = true;
+        numbers_copy[index2].selected = true;
+        setNumbers([...numbers_copy]);
+        await wait(speed)
         if (numbers_copy[index].number < numbers_copy[index2].number) {
-          numbers_copy[index].selected = true;
-          numbers_copy[index2].selected = true;
-          setNumbers([...numbers_copy]);
-          await wait(speed)
           let temp_num = numbers[index].number;
           let temp_num2 = numbers[index2].number;
           numbers_copy[index].number = temp_num2;
           numbers_copy[index2].number = temp_num;
-          numbers_copy[index].selected = false;
-          numbers_copy[index2].selected = false;
-          setNumbers([...numbers_copy]);
         }
-        else
-        {
-          numbers_copy[index].selected = true;
-          numbers_copy[index2].selected = true;
-          setNumbers([...numbers_copy]);
-          await wait(speed)
-          numbers_copy[index].selected = false;
-          numbers_copy[index2].selected = false;
-          setNumbers([...numbers_copy]);
-        }
+        numbers_copy[index].selected = false;
+        numbers_copy[index2].selected = false;
+        setNumbers([...numbers_copy]);
       }
     }
     setIsSorting(false)
@@ -72,27 +62,17 @@ function App() {
     for (let i = 0; i < numbers.length; i++) {
       for (let index = 0; index < numbers.length-1; index++) {
         let index2 = index+1;
+        numbers_copy[index2].selected = true;
+        setNumbers([...numbers_copy]);
+        await wait(speed)
         if (numbers_copy[index].number > numbers_copy[index2].number) {
-          numbers_copy[index2].selected = true;
-          setNumbers([...numbers_copy]);
-          await wait(speed)
           let temp_num = numbers[index].number;
           let temp_num2 = numbers[index2].number;
           numbers_copy[index].number = temp_num2;
           numbers_copy[index2].number = temp_num;
-          numbers_copy[index].selected = false;
-          numbers_copy[index2].selected = false;
         }
-        else
-        {
-          numbers_copy[index].selected = true;
-          numbers_copy[index2].selected = true;
-          setNumbers([...numbers_copy]);
-          await wait(speed)
-          numbers_copy[index].selected = false;
-          numbers_copy[index2].selected = false;
-          setNumbers([...numbers_copy]);
-        }
+        numbers_copy[index].selected = false;
+        numbers_copy[index2].selected = false;
       }
     }
     setIsSorting(false);
@@ -102,7 +82,7 @@ function App() {
     <div className='container'>
       <h2>ALGORITHM VISUALIZER</h2>
       <div className="bars">
-        {numbers.map(x => <div className={x.selected ? "value_bar selected" : "value_bar"} style={{height:x.number, width:(500/numberCount)}} key={Math.random()}></div>)}
+        {numbers.map(x => <div className={x.selected ? "value_bar selected" : "value_bar"} style={{height:x.number, width:(500/numberCount), marginTop:500-x.number}} key={Math.random()}></div>)}
       </div>
       <form>
         <input type="range" min="5" value={numberCount} onChange={handleChange} disabled={isSorting ? "true" : ""}></input>
